@@ -1,12 +1,22 @@
 {
   "compilerOptions": {
-    "target": "es2016",                               
-    "module": "commonjs",  
-    "outDir": "dist", 
-    "baseUrl": "./src",                            
-    "esModuleInterop": true,                             
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,                                     
-    "skipLibCheck": true                                 
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "module": "nodenext",
+    "target": "esnext",
+    "lib": ["esnext"],
+    "types": ["node"],
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "strict": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   }
 }
