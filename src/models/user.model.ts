@@ -1,18 +1,16 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-import { IUser } from "../types/user";
+import { IUser, UserRole } from "../types/user";
 
 const userSchema = new Schema<IUser & Document>(
   {
     firstName: {
       type: String,
-      required: true,
       trim: true,
     },
 
     lastName: {
       type: String,
-      required: true,
       trim: true,
     },
 
@@ -26,24 +24,27 @@ const userSchema = new Schema<IUser & Document>(
 
     password: {
       type: String,
-      required: true,
       minlength: 6,
     },
 
     role: {
       type: String,
-      enum: ["user", "admin"],
-      default: "user",
+      enum: Object.values(UserRole),
+      required: true,
+      default: UserRole.USER,
     },
 
     isVerified: {
       type: Boolean,
       default: false,
     },
+     isRegComplet: {
+        type: Boolean,
+        default: false,
+    },
   },
   { timestamps: true }
 );
-
 
 const UserModel = mongoose.model<IUser>("User", userSchema);
 export default UserModel;

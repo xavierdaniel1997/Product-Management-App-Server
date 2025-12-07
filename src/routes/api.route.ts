@@ -5,6 +5,6 @@ import authRoute from "./auth.route";
 
 const route = express.Router();
 
-route.use("/", authRoute);
+route.use("/auth", authRoute);
 
 export default route;
