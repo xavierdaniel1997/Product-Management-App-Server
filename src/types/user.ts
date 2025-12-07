@@ -1,14 +1,18 @@
-export type UserRole = "user" | "admin";
+export enum UserRole {
+  ADMIN = "ADMIN",
+  USER = "USER",
+}
 
 export interface IUser {
-  _id: string;
-  firstName: string;
-  lastName: string;
+  _id?: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
-  password: string;
+  password?: string;
   role: UserRole;
   isVerified: boolean;
+  isRegComplet?: boolean;
   image?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
