@@ -31,7 +31,15 @@ const addProductController = async (req: Request, res: Response) => {
 
 const getProductsController = async (req: Request, res: Response) => {
   try {
-    const products = await getAllProductsService();
+    const { search, minPrice, maxPrice } = req.query;
+
+    const query: { search?: string; minPrice?: number; maxPrice?: number } = {};
+    if (search) query.search = search as string;
+    if (minPrice !== undefined) query.minPrice = Number(minPrice);
+    if (maxPrice !== undefined) query.maxPrice = Number(maxPrice);
+
+    const products = await getAllProductsService(query);
+    
     sendResponse(res, 200, products, "Products fetched successfully");
   } catch (error: any) {
     sendResponse(res, 400, null, "Failed to fetch products");
@@ -41,6 +49,7 @@ const getProductsController = async (req: Request, res: Response) => {
 const getProductByIdController = async (req: Request, res: Response) => {
   try {
     const productId = req.params.productId;
+    console.log("checking the productId", productId)
     if(!productId){
         throw new Error("Product _id not found")
     }
@@ -49,7 +58,7 @@ const getProductByIdController = async (req: Request, res: Response) => {
     if (!product) {
       return sendResponse(res, 404, null, "Product not found");
     }
-
+    console.log("products form the getProductById", product)
     sendResponse(res, 200, product, "Product fetched successfully");
   } catch (error: any) {
     sendResponse(res, 400, null, "Failed to fetch product");
