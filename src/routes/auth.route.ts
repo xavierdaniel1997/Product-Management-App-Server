@@ -1,11 +1,16 @@
-import { registerUser, resendOtp, verifyEmail, verifyOtpAndUser } from '../controller/auth.controller';
+import { googleLogin, loginUser, logoutUser, refreshAccessToken, registerUser, resendOtp, verifyEmail, verifyOtpAndUser } from '../controller/auth.controller';
 import express from 'express';
 
-const route = express.Router();
+const router = express.Router();
 
-route.post("/verify-email", verifyEmail);
-route.post("/verify-otp", verifyOtpAndUser);
-route.post("/resend-otp", resendOtp);
-route.post("/register-user", registerUser);
+router.post("/verify-email", verifyEmail);
+router.post("/verify-otp", verifyOtpAndUser);
+router.post("/resend-otp", resendOtp);
+router.post("/register-user", registerUser);
+router.post("/login", loginUser);
+router.post("/refresh-token", refreshAccessToken);
+router.post("/google-login", googleLogin);
+router.post("/logout", logoutUser);
 
-export default route;
+
+export default router;
