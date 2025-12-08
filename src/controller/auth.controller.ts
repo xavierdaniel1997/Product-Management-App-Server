@@ -148,7 +148,6 @@ const registerUser = async (
 
 
 const loginUser = async (req: Request, res: Response): Promise<void> => {
-    console.log("checking the login user details", req.body)
     try {
         const { email, password } = req.body;
         const userData = await findByEmail(email);
@@ -227,6 +226,7 @@ const logoutUser = async (req: Request, res: Response): Promise<void> => {
 
 
 const refreshAccessToken = async (req: Request, res: Response) => {
+    console.log("refreshAccessToken trigred..............", req.body)
   try {
     const token = req.cookies.refreshToken;
     if (!token) {
