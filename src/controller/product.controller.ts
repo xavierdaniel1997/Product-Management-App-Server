@@ -50,7 +50,6 @@ const getProductsController = async (req: Request, res: Response) => {
 const getProductByIdController = async (req: Request, res: Response) => {
   try {
     const productId = req.params.productId;
-    console.log("checking the productId", productId)
     if(!productId){
         throw new Error("Product _id not found")
     }
