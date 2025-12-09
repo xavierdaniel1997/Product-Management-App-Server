@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../utils/sendResponse";
 import { uploadMultipleToCloudinary } from "../utils/uploadAssetToCloudinary";
-import { createProductService, deleteProductService, getAllProductsService, getProductByIdService, updateProductService } from "../service/product.service";
+import { createProductService, deleteProductService, getAllProductsPaginatedService, getAllProductsService, getProductByIdService, updateProductService } from "../service/product.service";
 
 const addProductController = async (req: Request, res: Response) => {
     try{
@@ -118,8 +118,29 @@ const deleteProductController = async (req: Request, res: Response) => {
   }
 };
 
+const getProductByAdminController = async (req: Request, res: Response) => {
+  try{
+     const { page, limit, search, minPrice, maxPrice } = req.query;
+
+    const params: any = {
+      page: Number(page) || 1,
+      limit: Number(limit) || 10,
+    };
+
+    if (search) params.search = String(search);
+    if (minPrice !== undefined) params.minPrice = Number(minPrice);
+    if (maxPrice !== undefined) params.maxPrice = Number(maxPrice);
+
+    const products = await getAllProductsPaginatedService(params);
+
+    sendResponse(res, 200, products, "Products fetched successfully");
+  }catch(error){
+     sendResponse(res, 400, null, "Failed to fetch product");
+  }
+}
 
 
 
 
-export {addProductController, getProductsController, getProductByIdController, updateProductController, deleteProductController}
+
+export {addProductController, getProductsController, getProductByIdController, updateProductController, deleteProductController, getProductByAdminController}
