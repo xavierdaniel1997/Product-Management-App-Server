@@ -15,6 +15,12 @@ const productSchema = new Schema<IProduct & Document>(
       min: 0,
     },
 
+     stock: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+
     description: {
       type: String,
       required: true,

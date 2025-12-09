@@ -5,7 +5,7 @@ import { createProductService, deleteProductService, getAllProductsPaginatedServ
 
 const addProductController = async (req: Request, res: Response) => {
     try{
-        const {productName, price, description} = req.body;
+        const {productName, price, stock, description} = req.body;
         const userId = req.user._id;
         let images: string[] = [];
     if (req.files && Array.isArray(req.files)) {
@@ -17,6 +17,7 @@ const addProductController = async (req: Request, res: Response) => {
      const product = await createProductService({
       name: productName,
       price: Number(price),
+      stock: Number(stock),
       description,
       images,
       createdBy: userId,
@@ -73,7 +74,7 @@ const updateProductController = async (req: Request, res: Response) => {
     if(!productId){
         throw new Error("Product _id not found")
     }
-    const { productName, price, description } = req.body;
+    const { productName, price, stock, description } = req.body;
 
     let images: string[] = [];
 
@@ -88,6 +89,7 @@ const updateProductController = async (req: Request, res: Response) => {
 
     if (productName) payload.name = productName;
     if (price) payload.price = price;
+    if(stock) payload.stock = stock;
     if (description) payload.description = description;
     if (images.length > 0) payload.images = images;
 
