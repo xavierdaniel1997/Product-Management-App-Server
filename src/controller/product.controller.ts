@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { sendResponse } from "../utils/sendResponse";
 import { uploadMultipleToCloudinary } from "../utils/uploadAssetToCloudinary";
-import { createProductService, deleteProductService, getAllProductsService, getProductByIdService, updateProductService } from "../service/product.service";
+import { createProductService, deleteProductService, getAllProductsPaginatedService, getAllProductsService, getProductByIdService, updateProductService } from "../service/product.service";
 
 const addProductController = async (req: Request, res: Response) => {
     try{
@@ -31,7 +31,15 @@ const addProductController = async (req: Request, res: Response) => {
 
 const getProductsController = async (req: Request, res: Response) => {
   try {
-    const products = await getAllProductsService();
+    const { search, minPrice, maxPrice } = req.query;
+
+    const query: { search?: string; minPrice?: number; maxPrice?: number } = {};
+    if (search) query.search = search as string;
+    if (minPrice !== undefined) query.minPrice = Number(minPrice);
+    if (maxPrice !== undefined) query.maxPrice = Number(maxPrice);
+
+    const products = await getAllProductsService(query);
+    
     sendResponse(res, 200, products, "Products fetched successfully");
   } catch (error: any) {
     sendResponse(res, 400, null, "Failed to fetch products");
@@ -41,6 +49,7 @@ const getProductsController = async (req: Request, res: Response) => {
 const getProductByIdController = async (req: Request, res: Response) => {
   try {
     const productId = req.params.productId;
+    console.log("checking the productId", productId)
     if(!productId){
         throw new Error("Product _id not found")
     }
@@ -49,7 +58,7 @@ const getProductByIdController = async (req: Request, res: Response) => {
     if (!product) {
       return sendResponse(res, 404, null, "Product not found");
     }
-
+    console.log("products form the getProductById", product)
     sendResponse(res, 200, product, "Product fetched successfully");
   } catch (error: any) {
     sendResponse(res, 400, null, "Failed to fetch product");
@@ -109,8 +118,29 @@ const deleteProductController = async (req: Request, res: Response) => {
   }
 };
 
+const getProductByAdminController = async (req: Request, res: Response) => {
+  try{
+     const { page, limit, search, minPrice, maxPrice } = req.query;
+
+    const params: any = {
+      page: Number(page) || 1,
+      limit: Number(limit) || 10,
+    };
+
+    if (search) params.search = String(search);
+    if (minPrice !== undefined) params.minPrice = Number(minPrice);
+    if (maxPrice !== undefined) params.maxPrice = Number(maxPrice);
+
+    const products = await getAllProductsPaginatedService(params);
+
+    sendResponse(res, 200, products, "Products fetched successfully");
+  }catch(error){
+     sendResponse(res, 400, null, "Failed to fetch product");
+  }
+}
 
 
 
 
-export {addProductController, getProductsController, getProductByIdController, updateProductController, deleteProductController}
+
+export {addProductController, getProductsController, getProductByIdController, updateProductController, deleteProductController, getProductByAdminController}
